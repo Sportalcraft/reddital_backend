@@ -10,8 +10,8 @@ import javax.validation.constraints.NotEmpty;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Accessors(chain = true)
 @Entity
 @Table(name = "users")
