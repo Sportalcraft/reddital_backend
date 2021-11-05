@@ -52,10 +52,10 @@ public class UserService {
 
 
     public UserDto findUserByUsername(String username) {
-        Optional<User> user = Optional.ofNullable(userRepository.findByUsername(username));
+        Optional<User> user = getOptional(userRepository.findByUsername(username));
 
         if (user.isPresent()) {
-            return modelMapper.map(user.get(), UserDto.class);
+            return mapDto(user.get());
         }
 
        throw new EntityNotFoundException(String.format("The user %s was not found!", username));
