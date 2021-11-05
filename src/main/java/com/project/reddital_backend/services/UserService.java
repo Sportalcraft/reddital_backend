@@ -7,6 +7,7 @@ import com.project.reddital_backend.exceptions.EntityNotFoundException;
 import com.project.reddital_backend.models.User;
 import com.project.reddital_backend.repositories.UserRepository;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @Service
 @Getter
+@Setter
 public class UserService {
 
     // ------------------------------------------------------- properties -------------------------------------------------------
@@ -34,7 +36,7 @@ public class UserService {
      * @return the user dto that was saved to the DB
      */
     public UserDto signup(UserDto userDto) {
-        Optional<User> user = getOptional(userRepository.findByUsername(userDto.getUsername()));
+        Optional<User> user = getOptional(getUserRepository().findByUsername(userDto.getUsername()));
 
         if (user.isEmpty()) {
             //No such user exit, create the new user object and save it.
@@ -58,7 +60,7 @@ public class UserService {
      * @return the requested user dto
      */
     public UserDto findUserByUsername(String username) {
-        Optional<User> user = getOptional(userRepository.findByUsername(username));
+        Optional<User> user = getOptional(getUserRepository().findByUsername(username));
 
         if (user.isPresent()) {
             return mapDto(user.get()); // return requested user
@@ -75,7 +77,7 @@ public class UserService {
      * @return the requested user dto
      */
     public UserDto findUserById(long id) {
-        Optional<User> user = getOptional(userRepository.findById(id));
+        Optional<User> user = getOptional(getUserRepository().findById(id));
 
         if (user.isPresent()) {
             return mapDto(user.get()); // return requested user
@@ -93,7 +95,7 @@ public class UserService {
      * @return the updated user dto in the DB
      */
     public UserDto updateProfile(UserDto userDto) {
-        Optional<User> user = getOptional(userRepository.findByUsername(userDto.getUsername()));
+        Optional<User> user = getOptional(getUserRepository().findByUsername(userDto.getUsername()));
 
         if (user.isPresent()) {
             User userModel = user.get();
@@ -118,7 +120,7 @@ public class UserService {
      * @return the new updated user's dto
      */
     public UserDto changePassword(UserDto userDto, String newPassword) {
-        Optional<User> user = getOptional(userRepository.findByUsername(userDto.getUsername()));
+        Optional<User> user = getOptional(getUserRepository().findByUsername(userDto.getUsername()));
 
         if (user.isPresent()) {
             User userModel = user.get();
@@ -158,7 +160,7 @@ public class UserService {
      * @return the encrypted password
      */
     private String encryptPassword(String password) {
-        return bCryptPasswordEncoder.encode(password);
+        return getBCryptPasswordEncoder().encode(password);
     }
 
     /**
@@ -176,6 +178,6 @@ public class UserService {
         if(shouldEncrypt)
             user.setPassword(encryptPassword(user.getPassword())); // encrypt password
 
-        return mapDto(userRepository.save(user));
+        return mapDto(getUserRepository().save(user));
     }
 }
