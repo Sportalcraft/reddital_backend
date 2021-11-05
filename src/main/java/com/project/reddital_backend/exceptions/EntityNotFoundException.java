@@ -1,6 +1,6 @@
 package com.project.reddital_backend.exceptions;
 
-public class EntityNotFoundException extends RuntimeException {
+public class EntityNotFoundException extends CustomException {
 
     public EntityNotFoundException(String message) {
         super(message);
