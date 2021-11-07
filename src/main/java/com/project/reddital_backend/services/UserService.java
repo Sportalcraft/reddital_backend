@@ -38,7 +38,7 @@ public class UserService {
     public UserDto signup(UserDto userDto) {
         Optional<User> user = getOptional(getUserRepository().findByUsername(userDto.getUsername()));
 
-        if (user.isEmpty()) {
+        if (!user.isPresent()) {
             //No such user exit, create the new user object and save it.
 
             User newUser = new User()
