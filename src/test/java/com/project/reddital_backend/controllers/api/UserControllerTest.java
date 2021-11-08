@@ -57,7 +57,7 @@ public class UserControllerTest {
 
         user = UserDto.builder()
                 .username("Sportalcraft")
-                .email("test@test.com")
+                .email("test@gmail.com")
                 .password("123456")
                 .build();
 
@@ -93,23 +93,4 @@ public class UserControllerTest {
 
         result.andDo(print());
     }
-
-
-
-    @Test
-    public void hello() throws Exception {
-        ResultActions result = mockMvc.perform(MockMvcRequestBuilders
-                       .get("/helloWorld")
-                       .accept(MediaType.APPLICATION_JSON));
-
-        result.andExpect(status().isOk())
-                .andExpect(content().string("\"Username already taken - please try with different username\""));
-    }
-
-
-    @Test
-    public void mock() throws Exception {
-        assertNull(null);
-    }
-
 }

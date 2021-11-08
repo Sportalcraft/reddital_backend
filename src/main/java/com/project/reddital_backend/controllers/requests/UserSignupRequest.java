@@ -46,7 +46,7 @@ public class UserSignupRequest extends Request {
             ans = "password is missing!";
         } else if (getPassword().length() < 6) {
             ans = "password is too short!";
-        } else if (isValidEmailAddress(getEmail())) {
+        } else if (!isValidEmailAddress(getEmail())) {
             ans = "email is not valid";
         }
 
@@ -54,9 +54,9 @@ public class UserSignupRequest extends Request {
     }
 
 
-    // --------------------------------------- private methods
+    // --------------------------------------- private methods ---------------------------------------
 
-    public static boolean isValidEmailAddress(String email) {
+    private static boolean isValidEmailAddress(String email) {
         try {
             InternetAddress emailAddr = new InternetAddress(email);
             emailAddr.validate();
