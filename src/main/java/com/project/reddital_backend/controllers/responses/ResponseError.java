@@ -15,8 +15,6 @@ import java.util.Date;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ResponseError {
-    private Date timestamp;
-    private String message;
-    private String details;
+public class ResponseError extends Response<String> {
+    private Date timestamp = new Date();
 }

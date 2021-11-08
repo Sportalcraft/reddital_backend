@@ -35,7 +35,7 @@ public class UserService {
      * @param userDto the information on the user to be created
      * @return the user dto that was saved to the DB
      */
-    public UserDto signup(UserDto userDto) {
+    public UserDto signup(UserDto userDto) throws DuplicateEntityException {
         Optional<User> user = getOptional(getUserRepository().findByUsername(userDto.getUsername()));
 
         if (!user.isPresent()) {
@@ -50,7 +50,7 @@ public class UserService {
         }
 
         // user already exist. throw exception.
-        throw new DuplicateEntityException("Failed to signup, user already exists : " + user.get());
+        throw new DuplicateEntityException("Failed to signup, user already exists : " + user.get().getUsername());
     }
 
     /**
@@ -59,7 +59,7 @@ public class UserService {
      * @param username the username to search a user by
      * @return the requested user dto
      */
-    public UserDto findUserByUsername(String username) {
+    public UserDto findUserByUsername(String username) throws EntityNotFoundException {
         Optional<User> user = getOptional(getUserRepository().findByUsername(username));
 
         if (user.isPresent()) {
@@ -76,7 +76,7 @@ public class UserService {
      * @param id the id to search a user by
      * @return the requested user dto
      */
-    public UserDto findUserById(long id) {
+    public UserDto findUserById(long id) throws EntityNotFoundException {
         Optional<User> user = getOptional(getUserRepository().findById(id));
 
         if (user.isPresent()) {
@@ -94,7 +94,7 @@ public class UserService {
      * @param userDto the user with the updated profile info
      * @return the updated user dto in the DB
      */
-    public UserDto updateProfile(UserDto userDto) {
+    public UserDto updateProfile(UserDto userDto) throws EntityNotFoundException {
         Optional<User> user = getOptional(getUserRepository().findByUsername(userDto.getUsername()));
 
         if (user.isPresent()) {
@@ -119,7 +119,7 @@ public class UserService {
      * @param newPassword the new password (plain text)
      * @return the new updated user's dto
      */
-    public UserDto changePassword(UserDto userDto, String newPassword) {
+    public UserDto changePassword(UserDto userDto, String newPassword) throws EntityNotFoundException {
         Optional<User> user = getOptional(getUserRepository().findByUsername(userDto.getUsername()));
 
         if (user.isPresent()) {

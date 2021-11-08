@@ -17,14 +17,25 @@ import java.util.Date;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Response<T> {
 
+    /**
+     * statuses
+     */
     public enum Status {
-        OK, BAD_REQUEST, UNAUTHORIZED, VALIDATION_EXCEPTION, EXCEPTION, WRONG_CREDENTIALS, ACCESS_DENIED, NOT_FOUND, DUPLICATE_ENTITY
+        OK, BAD_REQUEST, UNAUTHORIZED, VALIDATION_EXCEPTION, INTERNAL_ERROR, WRONG_CREDENTIALS, ACCESS_DENIED, NOT_FOUND, DUPLICATE_ENTITY
     }
+
+    // ------------------------------------------------- properties -------------------------------------------------
 
     private Status status;
     private T payload;
-    private Object errors;
-    private Object metadata;
+    private String msg;
+    private Date time = new Date();
+
+
+
+
+
+    // ------------------------------------------------- static initializers -------------------------------------------------
 
     public static <T> Response<T> badRequest() {
         Response<T> response = new Response<>();
@@ -62,9 +73,9 @@ public class Response<T> {
         return response;
     }
 
-    public static <T> Response<T> exception() {
+    public static <T> Response<T> internal() {
         Response<T> response = new Response<>();
-        response.setStatus(Status.EXCEPTION);
+        response.setStatus(Status.INTERNAL_ERROR);
         return response;
     }
 
@@ -78,32 +89,6 @@ public class Response<T> {
         Response<T> response = new Response<>();
         response.setStatus(Status.DUPLICATE_ENTITY);
         return response;
-    }
-
-    public void addErrorMsgToResponse(String errorMsg, Exception ex) {
-        ResponseError error = new ResponseError()
-                .setDetails(errorMsg)
-                .setMessage(ex.getMessage())
-                .setTimestamp(new Date());
-        setErrors(error);
-    }
-
-    @Getter
-    @Accessors(chain = true)
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class PageMetadata {
-        private final int size;
-        private final long totalElements;
-        private final int totalPages;
-        private final int number;
-
-        public PageMetadata(int size, long totalElements, int totalPages, int number) {
-            this.size = size;
-            this.totalElements = totalElements;
-            this.totalPages = totalPages;
-            this.number = number;
-        }
     }
 
 }

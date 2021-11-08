@@ -2,19 +2,16 @@ package com.project.reddital_backend.DTOs.mappers;
 
 import com.project.reddital_backend.DTOs.models.UserDto;
 import com.project.reddital_backend.models.User;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-@RunWith(MockitoJUnitRunner.class)
 @ExtendWith(MockitoExtension.class)
 public class UserMapperTest {
 
@@ -24,7 +21,7 @@ public class UserMapperTest {
 
     // ------------------------------------------------------- preparations -------------------------------------------------------
 
-    @Before
+    @BeforeEach
     public void setUp() {
         user = User.builder()
                 .username("Sportalcraft")
@@ -33,7 +30,7 @@ public class UserMapperTest {
                 .build();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         user = null;
     }
