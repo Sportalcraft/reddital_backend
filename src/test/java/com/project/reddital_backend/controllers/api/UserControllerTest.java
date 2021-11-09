@@ -159,7 +159,7 @@ public class UserControllerTest {
                 .password(password)
                 .build();
 
-        ResultActions result = post(USER_PATH + "/login", requestAsString(request));
+        ResultActions result = get(USER_PATH + "/login", requestAsString(request));
         String body = result.andReturn().getResponse().getContentAsString();
 
         result.andExpect(status().isOk());
@@ -183,12 +183,12 @@ public class UserControllerTest {
                 .password(password)
                 .build();
 
-        ResultActions result = post(USER_PATH + "/login", requestAsString(request));
+        ResultActions result = get(USER_PATH + "/login", requestAsString(request));
         String body = result.andReturn().getResponse().getContentAsString();
 
         result.andExpect(status().isBadRequest());
     }
-
+–
     @Test
     @DisplayName("test login with wrong credentials")
     public void login_wrongCredentials() throws Exception {
@@ -199,7 +199,7 @@ public class UserControllerTest {
                 .password(password + "!")
                 .build();
 
-        ResultActions result = post(USER_PATH + "/login", requestAsString(request));
+        ResultActions result = get(USER_PATH + "/login", requestAsString(request));
         result.andExpect(status().isUnauthorized());
     }
 
@@ -213,7 +213,7 @@ public class UserControllerTest {
                 .password(password )
                 .build();
 
-        ResultActions result = post(USER_PATH + "/login", requestAsString(request));
+        ResultActions result = get(USER_PATH + "/login", requestAsString(request));
         result.andExpect(status().isNotFound());
     }
 
@@ -242,6 +242,13 @@ public class UserControllerTest {
 
     private ResultActions post(String uri, String content) throws Exception {
         return mockMvc.perform(MockMvcRequestBuilders.post(uri)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content)
+        );
+    }
+
+    private ResultActions get(String uri, String content) throws Exception {
+        return mockMvc.perform(MockMvcRequestBuilders.get(uri)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content)
         );

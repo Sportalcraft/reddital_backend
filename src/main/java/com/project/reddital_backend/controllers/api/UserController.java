@@ -32,7 +32,7 @@ public class UserController {
                 .body(registerUser(signupRequest));
     }
 
-    @PostMapping("/login")
+    @GetMapping("/login")
     public ResponseEntity<UserDto> login(@RequestBody @Valid LoginRequest loginRequest) {
         loginRequest.validate();
 
@@ -86,7 +86,7 @@ public class UserController {
                 .setEmail(signupRequest.getEmail())
                 .setPassword(signupRequest.getPassword());
 
-        return userService.signup(userDto).setPassword("");
+        return userService.signup(userDto);
     }
 
     /**
@@ -97,7 +97,7 @@ public class UserController {
      * @throws BadParametersException if the parameters if the request were bad
      */
     private UserDto loginUser(LoginRequest loginRequest) throws UnauthorizedException, BadParametersException {
-        return userService.login(loginRequest.getUsername(), loginRequest.getPassword()).setPassword("");
+        return userService.login(loginRequest.getUsername(), loginRequest.getPassword());
     }
 
 
