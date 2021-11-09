@@ -4,6 +4,7 @@ import com.project.reddital_backend.DTOs.mappers.UserMapper;
 import com.project.reddital_backend.DTOs.models.UserDto;
 import com.project.reddital_backend.exceptions.DuplicateEntityException;
 import com.project.reddital_backend.exceptions.EntityNotFoundException;
+import com.project.reddital_backend.exceptions.UnauthorizedException;
 import com.project.reddital_backend.models.User;
 import com.project.reddital_backend.repositories.UserRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -18,9 +19,7 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -36,8 +35,6 @@ public class UserServiceTest {
     @MockBean
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    //@Autowired
-    //@InjectMocks
     @SpyBean
     private UserService userServiceUnderTest;
 
@@ -280,5 +277,65 @@ public class UserServiceTest {
             userServiceUnderTest.changePassword(dto, newPass);
         });
     }
+
+    @Test
+    @DisplayName("test login with good info")
+    public void login_good() {
+        Mockito.when(mockUserRepository.findByUsername(anyString()))
+                .thenReturn(user);
+
+        // return if the password matches
+        Mockito.when(bCryptPasswordEncoder.matches(anyString(),anyString())).thenAnswer((Answer<Boolean>) invocation -> {
+            Object[] args = invocation.getArguments();
+            return args[0].equals(args[1]);
+        });
+
+
+        //get result
+        final UserDto result = userServiceUnderTest.login(user.getUsername(), user.getPassword());
+
+        // Verify the results
+        assertNotNull(result);
+        assertEquals(user.getUsername(), result.getUsername());
+    }
+
+    @Test
+    @DisplayName("test login with a username that does not exist")
+    public void login_nonExistUser() {
+        assertThrows(EntityNotFoundException.class, ()->{
+            Mockito.when(mockUserRepository.findByUsername(anyString()))
+                    .thenReturn(user);
+
+            // return if the password matches
+            Mockito.when(bCryptPasswordEncoder.matches(anyString(),anyString())).thenAnswer((Answer<Boolean>) invocation -> {
+                Object[] args = invocation.getArguments();
+                return args[0].equals(args[1]);
+            });
+
+
+            //get result
+            userServiceUnderTest.login(null, user.getPassword());
+        });
+    }
+
+    @Test
+    @DisplayName("test login with the wrong password")
+    public void login_wrongPassword() {
+        assertThrows(UnauthorizedException.class, ()->{
+            Mockito.when(mockUserRepository.findByUsername(anyString()))
+                    .thenReturn(user);
+
+            // return if the password matches
+            Mockito.when(bCryptPasswordEncoder.matches(anyString(),anyString())).thenAnswer((Answer<Boolean>) invocation -> {
+                Object[] args = invocation.getArguments();
+                return args[0].equals(args[1]);
+            });
+
+
+            //get result
+            userServiceUnderTest.login(user.getUsername(), user.getPassword() + "_banana?");
+        });
+    }
+
 
 }

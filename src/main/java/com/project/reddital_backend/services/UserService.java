@@ -4,6 +4,7 @@ import com.project.reddital_backend.DTOs.mappers.UserMapper;
 import com.project.reddital_backend.DTOs.models.UserDto;
 import com.project.reddital_backend.exceptions.DuplicateEntityException;
 import com.project.reddital_backend.exceptions.EntityNotFoundException;
+import com.project.reddital_backend.exceptions.UnauthorizedException;
 import com.project.reddital_backend.models.User;
 import com.project.reddital_backend.repositories.UserRepository;
 import lombok.Getter;
@@ -131,6 +132,31 @@ public class UserService {
 
         // user does not exist
         throw new EntityNotFoundException(String.format("The user %s was not found!", userDto.getUsername()));
+    }
+
+    /**
+     * perform a login
+     * @throws EntityNotFoundException if such user does not exist
+     * @throws UnauthorizedException if login failed
+     * @param username the username
+     * @param password the passwird of the user
+     * @return null if can't login, the user dto otherwise
+     */
+    public UserDto login(String username, String password) {
+        Optional<User> user = getOptional(getUserRepository().findByUsername(username));
+
+        if (user.isPresent()) {
+
+            //verify the password
+           if(bCryptPasswordEncoder.matches(password, user.get().getPassword())) {
+               return mapDto(user.get());
+           }else {
+              throw new UnauthorizedException("the password is wrong!");
+           }
+        }
+
+        // user does not exist
+        throw new EntityNotFoundException(String.format("The user %s was not found!", username));
     }
 
 

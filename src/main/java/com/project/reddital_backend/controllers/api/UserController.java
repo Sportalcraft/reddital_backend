@@ -5,6 +5,7 @@ import com.project.reddital_backend.controllers.requests.UserSignupRequest;
 import com.project.reddital_backend.exceptions.BadParametersException;
 import com.project.reddital_backend.exceptions.DuplicateEntityException;
 import com.project.reddital_backend.exceptions.EntityNotFoundException;
+import com.project.reddital_backend.exceptions.UnauthorizedException;
 import com.project.reddital_backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,6 +50,13 @@ public class UserController {
     public final ResponseEntity<String> handle(EntityNotFoundException ex) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public final ResponseEntity<String> handle(UnauthorizedException ex) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
                 .body(ex.getMessage());
     }
 

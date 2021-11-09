@@ -136,6 +136,20 @@ public class UserControllerTest {
 
 
 
+
+
+
+    @Test
+    @DisplayName("test login with good info")
+    public void login_good() throws Exception {
+
+    }
+
+
+
+
+
+
     // ----------------------------------------------------- private methods -----------------------------------------------------
 
     private void checkProperty(String expected, String jsonPath, String body){
