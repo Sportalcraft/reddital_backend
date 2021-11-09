@@ -7,6 +7,7 @@ import com.project.reddital_backend.exceptions.DuplicateEntityException;
 import com.project.reddital_backend.exceptions.EntityNotFoundException;
 import com.project.reddital_backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,7 +39,7 @@ public class UserController {
 
     @ExceptionHandler(DuplicateEntityException.class)
     public final ResponseEntity<String> handle(DuplicateEntityException ex) {
-       return ResponseEntity.badRequest()
+       return ResponseEntity.unprocessableEntity()
                 .body(ex.getMessage());
     }
 
@@ -50,7 +51,8 @@ public class UserController {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public final ResponseEntity<String> handle(EntityNotFoundException ex) {
-        return ResponseEntity.badRequest()
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
                 .body(ex.getMessage());
     }
 
