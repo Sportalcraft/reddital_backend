@@ -24,11 +24,7 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<UserDto> signup(@RequestBody @Valid UserSignupRequest userSignupRequest) {
-
-        String validator = userSignupRequest.validate();
-        if(validator != null) {
-           throw new BadParametersException(validator);
-        }
+        userSignupRequest.validate();
 
         return ResponseEntity.created(URI.create("/user/signup"))
                 .body(registerUser(userSignupRequest));

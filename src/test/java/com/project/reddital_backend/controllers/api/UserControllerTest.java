@@ -109,7 +109,7 @@ public class UserControllerTest {
         ResultActions result = post(USER_PATH + "/signup", requestAsString(request));
         String body = result.andReturn().getResponse().getContentAsString();
 
-        result.andExpect(status().isBadRequest());
+        result.andExpect(status().isUnprocessableEntity());
 
         checkProperty("EXIST", "$", body);
 

@@ -14,15 +14,8 @@ public class RequestTest {
 
     // a class that implements the abstract request class
     private static class RequestMock extends Request{
-
         @Override
-        public String validate() {
-            return null;
-        }
-
-        @Override
-        public void clean() {
-        }
+        public void validate() {}
     }
 
 
@@ -40,11 +33,24 @@ public class RequestTest {
     }
 
     @Test
-    @DisplayName("test removeWhiteSpace")
+    @DisplayName("test nullOrEmpty")
     public void nullOrEmpty() {
         assertTrue(new RequestMock().nullOrEmpty(null));
         assertTrue(new RequestMock().nullOrEmpty(""));
         assertFalse(new RequestMock().nullOrEmpty("abc"));
+    }
+
+    @Test
+    @DisplayName("test haveWhiteSpaces")
+    public void haveWhiteSpaces() {
+        assertFalse(new RequestMock().haveWhiteSpaces(null));
+        assertFalse(new RequestMock().haveWhiteSpaces("abc"));
+
+        assertTrue(new RequestMock().haveWhiteSpaces("a b"));
+        assertTrue(new RequestMock().haveWhiteSpaces("a b"));
+        assertTrue(new RequestMock().haveWhiteSpaces("a\tb"));
+        assertTrue(new RequestMock().haveWhiteSpaces("a\nb"));
+        assertTrue(new RequestMock().haveWhiteSpaces("ab "));
     }
 
 }

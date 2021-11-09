@@ -1,6 +1,7 @@
 package com.project.reddital_backend.controllers.requests;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.project.reddital_backend.exceptions.BadParametersException;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -27,16 +28,8 @@ public class UserSignupRequest extends Request {
     private String password;
 
     @Override
-    public void clean() {
-        setUsername(removeWhiteSpace(getUsername()));
-        setEmail(removeWhiteSpace(getEmail()));
-        setPassword(removeWhiteSpace(getPassword()));
-    }
-
-    @Override
-    public String validate() {
+    public void validate() {
         String ans = null;
-        clean();
 
         if(nullOrEmpty(getUsername())) {
             ans = "username is missing!";
@@ -44,19 +37,31 @@ public class UserSignupRequest extends Request {
             ans = "email is missing!";
         } else if (nullOrEmpty(getPassword())) {
             ans = "password is missing!";
-        } else if (getPassword().length() < 6) {
+        }
+
+       else if (haveWhiteSpaces(getUsername())){
+            ans = "username cannot contains white spaces!";
+        }else if (haveWhiteSpaces(getEmail())){
+            ans = "email cannot contains white spaces!";
+        }else if (haveWhiteSpaces(getPassword())){
+            ans = "password cannot contains white spaces!";
+        }
+
+        else if (getPassword().length() < 6) {
             ans = "password is too short!";
         } else if (!isValidEmailAddress(getEmail())) {
             ans = "email is not valid";
         }
 
-        return ans;
+        if(ans != null){
+            throw new BadParametersException(ans);
+        }
     }
 
 
     // --------------------------------------- private methods ---------------------------------------
 
-    private static boolean isValidEmailAddress(String email) {
+    private boolean isValidEmailAddress(String email) {
         try {
             InternetAddress emailAddr = new InternetAddress(email);
             emailAddr.validate();
