@@ -6,10 +6,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@ExtendWith(MockitoExtension.class)
+//@ExtendWith(MockitoExtension.class)
 public class ResponseTest {
 
-    // ---------------------------------------------- fields ----------------------------------------------
+    /*// ---------------------------------------------- fields ----------------------------------------------
 
     private final Object payload = new Object();
 
@@ -65,5 +65,5 @@ public class ResponseTest {
     private void assertResponse(Response<Object> response, Response.Status status){
         assertEquals(payload, response.getPayload());
         assertEquals(status, response.getStatus());
-    }
+    }*/
 }

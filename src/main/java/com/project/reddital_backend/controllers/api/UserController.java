@@ -3,7 +3,9 @@ package com.project.reddital_backend.controllers.api;
 import com.project.reddital_backend.DTOs.models.UserDto;
 import com.project.reddital_backend.controllers.requests.UserSignupRequest;
 import com.project.reddital_backend.controllers.responses.Response;
+import com.project.reddital_backend.exceptions.BadParametersException;
 import com.project.reddital_backend.exceptions.DuplicateEntityException;
+import com.project.reddital_backend.exceptions.EntityNotFoundException;
 import com.project.reddital_backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.net.URI;
 
 @RestController
 @CrossOrigin
@@ -21,34 +24,36 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/signup")
-    public Response<UserDto> signup(@RequestBody @Valid UserSignupRequest userSignupRequest) {
+    public ResponseEntity<UserDto> signup(@RequestBody @Valid UserSignupRequest userSignupRequest) {
 
         String validator = userSignupRequest.validate();
         if(validator != null) {
-            return Response.<UserDto>badRequest()
-                    .setPayload(null)
-                    .setMsg("bad parameters : " + validator);
+           throw new BadParametersException(validator);
         }
 
-        try {
-            return Response.<UserDto>ok().setPayload(registerUser(userSignupRequest));
-        } catch (DuplicateEntityException e){
-            return Response.<UserDto>duplicateEntity()
-                    .setPayload(null)
-                    .setMsg(e.getMessage());
-        } catch (Exception e) {
-            return Response.<UserDto>internal()
-                    .setPayload(null)
-                    .setMsg("an error accrued while signing up");
-        }
+        return ResponseEntity.created(URI.create("/user/signup"))
+                .body(registerUser(userSignupRequest));
     }
 
 
+    // -------------------------------------- exception handlers --------------------------------------
 
+    @ExceptionHandler(DuplicateEntityException.class)
+    public final ResponseEntity<String> handle(DuplicateEntityException ex) {
+       return ResponseEntity.badRequest()
+                .body(ex.getMessage());
+    }
 
-    @ExceptionHandler(RuntimeException.class)
-    public final ResponseEntity<Exception> handleAllExceptions(RuntimeException ex) {
-        return new ResponseEntity<Exception>(ex, HttpStatus.INTERNAL_SERVER_ERROR);
+    @ExceptionHandler(BadParametersException.class)
+    public final ResponseEntity<String> handle(BadParametersException ex) {
+        return ResponseEntity.badRequest()
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public final ResponseEntity<String> handle(EntityNotFoundException ex) {
+        return ResponseEntity.badRequest()
+                .body(ex.getMessage());
     }
 
 

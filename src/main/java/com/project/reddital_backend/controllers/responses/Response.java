@@ -2,34 +2,39 @@ package com.project.reddital_backend.controllers.responses;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.Date;
 
 @Getter
 @Setter
 @Accessors(chain = true)
-@NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Response<T> {
+public class Response<T> {//extends ResponseEntity<T> {
 
-    /**
-     * statuses
-     */
-    public enum Status {
-        OK, BAD_REQUEST, UNAUTHORIZED, VALIDATION_EXCEPTION, INTERNAL_ERROR, WRONG_CREDENTIALS, ACCESS_DENIED, NOT_FOUND, DUPLICATE_ENTITY
+/*    // ------------------------------------------------- properties -------------------------------------------------
+
+    //private Status status;
+    //private T payload;
+    //private String msg;
+    //private Date time = new Date();
+
+    // ---------------------------------------------- ctors ----------------------------------------------
+
+    public Response(HttpStatus status) {
+        super(status);
     }
 
-    // ------------------------------------------------- properties -------------------------------------------------
-
-    private Status status;
-    private T payload;
-    private String msg;
-    private Date time = new Date();
+    public Response(T body, HttpStatus status) {
+        super(body, status);
+    }
 
 
 
@@ -37,16 +42,19 @@ public class Response<T> {
 
     // ------------------------------------------------- static initializers -------------------------------------------------
 
-    public static <T> Response<T> badRequest() {
-        Response<T> response = new Response<>();
-        response.setStatus(Status.BAD_REQUEST);
-        return response;
-    }
 
     public static <T> Response<T> ok() {
-        Response<T> response = new Response<>();
-        response.setStatus(Status.OK);
-        return response;
+        return new Response<>(HttpStatus.OK);
+    }
+
+
+    public static <T> Response<T> badRequest() {
+        return new Response<>(HttpStatus.BAD_REQUEST);
+    }
+
+
+    public static <T> Response<T> badRequest() {
+        return new Response<>(HttpStatus.OK);;
     }
 
     public static <T> Response<T> unauthorized() {
@@ -89,6 +97,6 @@ public class Response<T> {
         Response<T> response = new Response<>();
         response.setStatus(Status.DUPLICATE_ENTITY);
         return response;
-    }
+    }*/
 
 }

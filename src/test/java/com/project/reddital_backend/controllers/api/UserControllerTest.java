@@ -84,13 +84,12 @@ public class UserControllerTest {
         ResultActions result = post(USER_PATH + "/signup", requestAsString(request));
         String body = result.andReturn().getResponse().getContentAsString();
 
-        result.andExpect(status().isOk());
+        result.andExpect(status().isCreated());
 
-        checkProperty(username, "$.payload.username", body);
-        checkProperty(email, "$.payload.email", body);
+        checkProperty(email, "$.email", body);
 
         try {
-            checkProperty("", "$.payload.password", body);
+            checkProperty("", "$.password", body);
         } catch (PathNotFoundException ignored) {}
 
     }
@@ -110,10 +109,11 @@ public class UserControllerTest {
         ResultActions result = post(USER_PATH + "/signup", requestAsString(request));
         String body = result.andReturn().getResponse().getContentAsString();
 
-        checkProperty("DUPLICATE_ENTITY", "$.status", body);
-        checkProperty("EXIST", "$.msg", body);
+        result.andExpect(status().isBadRequest());
 
-        checkNonProperty( "$.payload.username", body);
+        checkProperty("EXIST", "$", body);
+
+        checkNonProperty( "$.username", body);
     }
 
     @Test
@@ -127,9 +127,9 @@ public class UserControllerTest {
         ResultActions result = post(USER_PATH + "/signup", String.format("{\"email\": \"%s\", \"password\":\"%s\"}", email, password));
         String body = result.andReturn().getResponse().getContentAsString();
 
-        checkProperty("BAD_REQUEST", "$.status", body);
+        result.andExpect(status().isBadRequest());
 
-        checkNonProperty( "$.payload.username", body);
+        checkNonProperty( "$.username", body);
     }
 
 
