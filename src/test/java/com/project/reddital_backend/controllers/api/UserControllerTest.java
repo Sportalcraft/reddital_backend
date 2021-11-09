@@ -6,7 +6,7 @@ import com.jayway.jsonpath.PathNotFoundException;
 import com.project.reddital_backend.DTOs.models.UserDto;
 import com.project.reddital_backend.controllers.requests.LoginRequest;
 import com.project.reddital_backend.controllers.requests.Request;
-import com.project.reddital_backend.controllers.requests.UserSignupRequest;
+import com.project.reddital_backend.controllers.requests.SignupRequest;
 import com.project.reddital_backend.exceptions.DuplicateEntityException;
 import com.project.reddital_backend.exceptions.EntityNotFoundException;
 import com.project.reddital_backend.exceptions.UnauthorizedException;
@@ -81,7 +81,7 @@ public class UserControllerTest {
             return (UserDto) args[0];
         });
 
-        Request request = UserSignupRequest.builder()
+        Request request = SignupRequest.builder()
                         .username(username)
                         .email(email)
                         .password(password)
@@ -106,7 +106,7 @@ public class UserControllerTest {
         Mockito.when(mockUserService.signup(any()))
                 .thenThrow(new DuplicateEntityException("EXIST"));
 
-        Request request = UserSignupRequest.builder()
+        Request request = SignupRequest.builder()
                 .username(username)
                 .email(email)
                 .password(password)

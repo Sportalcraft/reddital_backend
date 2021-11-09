@@ -16,7 +16,7 @@ import javax.validation.constraints.NotEmpty;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserSignupRequest extends Request {
+public class SignupRequest extends Request {
 
     @NotEmpty(message = "{constraints.NotEmpty.message}")
     private String username;

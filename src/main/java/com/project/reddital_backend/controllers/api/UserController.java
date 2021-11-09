@@ -1,14 +1,12 @@
 package com.project.reddital_backend.controllers.api;
 
-import com.project.reddital_backend.DTOs.mappers.UserMapper;
 import com.project.reddital_backend.DTOs.models.UserDto;
 import com.project.reddital_backend.controllers.requests.LoginRequest;
-import com.project.reddital_backend.controllers.requests.UserSignupRequest;
+import com.project.reddital_backend.controllers.requests.SignupRequest;
 import com.project.reddital_backend.exceptions.BadParametersException;
 import com.project.reddital_backend.exceptions.DuplicateEntityException;
 import com.project.reddital_backend.exceptions.EntityNotFoundException;
 import com.project.reddital_backend.exceptions.UnauthorizedException;
-import com.project.reddital_backend.models.User;
 import com.project.reddital_backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,11 +25,11 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<UserDto> signup(@RequestBody @Valid UserSignupRequest userSignupRequest) {
-        userSignupRequest.validate();
+    public ResponseEntity<UserDto> signup(@RequestBody @Valid SignupRequest signupRequest) {
+        signupRequest.validate();
 
         return ResponseEntity.created(URI.create("/user/signup"))
-                .body(registerUser(userSignupRequest));
+                .body(registerUser(signupRequest));
     }
 
     @PostMapping("/login")
@@ -77,16 +75,16 @@ public class UserController {
 
     /**
      * receive a request ro user registration, and register it
-     * @param userSignupRequest the request
+     * @param signupRequest the request
      * @throws DuplicateEntityException if user already exist
      * @return the user that was saved to the DB
      */
-    private UserDto registerUser(UserSignupRequest userSignupRequest) throws DuplicateEntityException {
+    private UserDto registerUser(SignupRequest signupRequest) throws DuplicateEntityException {
         UserDto userDto = new UserDto()
-                //.setId(userSignupRequest.getId())
-                .setUsername(userSignupRequest.getUsername())
-                .setEmail(userSignupRequest.getEmail())
-                .setPassword(userSignupRequest.getPassword());
+                //.setId(signupRequest.getId())
+                .setUsername(signupRequest.getUsername())
+                .setEmail(signupRequest.getEmail())
+                .setPassword(signupRequest.getPassword());
 
         return userService.signup(userDto).setPassword("");
     }
