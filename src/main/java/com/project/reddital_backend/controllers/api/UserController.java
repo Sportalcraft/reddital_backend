@@ -2,13 +2,11 @@ package com.project.reddital_backend.controllers.api;
 
 import com.project.reddital_backend.DTOs.models.UserDto;
 import com.project.reddital_backend.controllers.requests.UserSignupRequest;
-import com.project.reddital_backend.controllers.responses.Response;
 import com.project.reddital_backend.exceptions.BadParametersException;
 import com.project.reddital_backend.exceptions.DuplicateEntityException;
 import com.project.reddital_backend.exceptions.EntityNotFoundException;
 import com.project.reddital_backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
