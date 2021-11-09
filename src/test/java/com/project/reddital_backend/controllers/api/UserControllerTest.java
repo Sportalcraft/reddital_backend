@@ -188,7 +188,7 @@ public class UserControllerTest {
 
         result.andExpect(status().isBadRequest());
     }
-–
+
     @Test
     @DisplayName("test login with wrong credentials")
     public void login_wrongCredentials() throws Exception {
