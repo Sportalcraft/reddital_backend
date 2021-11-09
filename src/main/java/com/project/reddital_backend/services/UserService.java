@@ -22,7 +22,7 @@ public class UserService {
     // ------------------------------------------------------- properties -------------------------------------------------------
 
     @Autowired
-    private UserRepository userRepository; // acess DB for user operations
+    private UserRepository userRepository; // access DB for user operations
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder; // encrypt and decrypt passwords

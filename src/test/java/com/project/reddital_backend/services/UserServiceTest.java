@@ -11,12 +11,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -24,36 +24,32 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.MockitoAnnotations.openMocks;
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith(SpringExtension.class)
 public class UserServiceTest {
 
     // ------------------------------------------------------- properties -------------------------------------------------------
 
-    @Mock
+    @MockBean
     private UserRepository mockUserRepository;
 
-    @Mock
+    @MockBean
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @InjectMocks
+    //@Autowired
+    //@InjectMocks
+    @SpyBean
     private UserService userServiceUnderTest;
 
 
 
     private User user;
 
-
-
-
-
-
     // ------------------------------------------------------- preparations -------------------------------------------------------
 
     @BeforeEach
     public void setUp() {
-        openMocks(this);
+        //openMocks(this);
 
         user = User.builder()
                 .username("Sportalcraft")
@@ -226,12 +222,12 @@ public class UserServiceTest {
             final String username = user.getUsername();
             final String newEmail = "newEmail@yosi.com";
 
-            final UserDto dto = userServiceUnderTest.findUserByUsername(username)
-                    .setEmail(newEmail);
-
             // edit the mocking
             Mockito.when(mockUserRepository.findByUsername(anyString()))
                     .thenReturn(null);
+
+            final UserDto dto = userServiceUnderTest.findUserByUsername(username)
+                    .setEmail(newEmail);
 
             userServiceUnderTest.updateProfile(dto);
         });
