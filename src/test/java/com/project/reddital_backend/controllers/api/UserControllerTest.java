@@ -4,9 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.PathNotFoundException;
 import com.project.reddital_backend.DTOs.models.UserDto;
+import com.project.reddital_backend.controllers.requests.LoginRequest;
 import com.project.reddital_backend.controllers.requests.Request;
 import com.project.reddital_backend.controllers.requests.UserSignupRequest;
 import com.project.reddital_backend.exceptions.DuplicateEntityException;
+import com.project.reddital_backend.exceptions.EntityNotFoundException;
+import com.project.reddital_backend.exceptions.UnauthorizedException;
 import com.project.reddital_backend.services.UserService;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,6 +26,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.MockitoAnnotations.openMocks;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -44,9 +48,11 @@ public class UserControllerTest {
     private ObjectMapper objectMapper;
 
     private final String USER_PATH  = "/user";
-    private final String username   = "Sportalcraft";
-    private final String email      = "test@gmail.com";
-    private final String password   = "12345678";
+
+    private final long      id         = 42L;
+    private final String    username   = "Sportalcraft";
+    private final String    email      = "test@gmail.com";
+    private final String    password   = "12345678";
 
 
     // ------------------------------------------------------- preparations -------------------------------------------------------
@@ -137,12 +143,78 @@ public class UserControllerTest {
 
 
 
-
-
     @Test
     @DisplayName("test login with good info")
     public void login_good() throws Exception {
+        Mockito.when(mockUserService.login(anyString(), anyString())).thenReturn(
+                UserDto.builder()
+                        .id(id)
+                        .username(username)
+                        .email(email)
+                        .build()
+        );
 
+        Request request = LoginRequest.builder()
+                .username(username)
+                .password(password)
+                .build();
+
+        ResultActions result = post(USER_PATH + "/login", requestAsString(request));
+        String body = result.andReturn().getResponse().getContentAsString();
+
+        result.andExpect(status().isOk());
+
+        checkProperty("" + id, "$.id", body);
+        checkProperty(username, "$.username", body);
+        checkProperty(email, "$.email", body);
+
+        try {
+            checkProperty("", "$.password", body);
+        } catch (PathNotFoundException ignored) {}
+    }
+
+    @Test
+    @DisplayName("test login with bad username")
+    public void login_badUserName() throws Exception {
+        Mockito.when(mockUserService.login(anyString(), anyString())).thenReturn(null);
+
+        Request request = LoginRequest.builder()
+                .username("")
+                .password(password)
+                .build();
+
+        ResultActions result = post(USER_PATH + "/login", requestAsString(request));
+        String body = result.andReturn().getResponse().getContentAsString();
+
+        result.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("test login with wrong credentials")
+    public void login_wrongCredentials() throws Exception {
+        Mockito.when(mockUserService.login(anyString(), anyString())).thenThrow(UnauthorizedException.class);
+
+        Request request = LoginRequest.builder()
+                .username(username)
+                .password(password + "!")
+                .build();
+
+        ResultActions result = post(USER_PATH + "/login", requestAsString(request));
+        result.andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @DisplayName("test login with non existing user")
+    public void login_nonExistUser() throws Exception {
+        Mockito.when(mockUserService.login(anyString(), anyString())).thenThrow(EntityNotFoundException.class);
+
+        Request request = LoginRequest.builder()
+                .username("fiovhrouvhrouvlsfn")
+                .password(password )
+                .build();
+
+        ResultActions result = post(USER_PATH + "/login", requestAsString(request));
+        result.andExpect(status().isNotFound());
     }
 
 
@@ -153,7 +225,7 @@ public class UserControllerTest {
     // ----------------------------------------------------- private methods -----------------------------------------------------
 
     private void checkProperty(String expected, String jsonPath, String body){
-        assertEquals(expected, JsonPath.read(body, jsonPath));
+        assertEquals(expected, "" + JsonPath.read(body, jsonPath));
     }
 
     private void checkNonProperty(String jsonPath, String body){

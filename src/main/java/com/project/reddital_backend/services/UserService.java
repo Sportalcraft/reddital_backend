@@ -139,10 +139,10 @@ public class UserService {
      * @throws EntityNotFoundException if such user does not exist
      * @throws UnauthorizedException if login failed
      * @param username the username
-     * @param password the passwird of the user
-     * @return null if can't login, the user dto otherwise
+     * @param password the password of the user
+     * @return null if can't log in, the user dto otherwise
      */
-    public UserDto login(String username, String password) {
+    public UserDto login(String username, String password) throws UnauthorizedException,EntityNotFoundException  {
         Optional<User> user = getOptional(getUserRepository().findByUsername(username));
 
         if (user.isPresent()) {

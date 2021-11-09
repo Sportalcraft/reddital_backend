@@ -20,6 +20,18 @@ public class UserSignupRequestTest {
     // ------------------------------------------------------- tests -------------------------------------------------------
 
     @Test
+    @DisplayName("test validate good")
+    public void validate_good(){
+        UserSignupRequest userSignupRequestUnderTest = UserSignupRequest.builder()
+                .username("Sportalcraft")
+                .email("tal@barzilay.yosi")
+                .password("12345678")
+                .build();
+
+        userSignupRequestUnderTest.validate();
+    }
+
+    @Test
     @DisplayName("test validate bad username")
     public void validate_badUsername(){
 

@@ -1,11 +1,14 @@
 package com.project.reddital_backend.controllers.api;
 
+import com.project.reddital_backend.DTOs.mappers.UserMapper;
 import com.project.reddital_backend.DTOs.models.UserDto;
+import com.project.reddital_backend.controllers.requests.LoginRequest;
 import com.project.reddital_backend.controllers.requests.UserSignupRequest;
 import com.project.reddital_backend.exceptions.BadParametersException;
 import com.project.reddital_backend.exceptions.DuplicateEntityException;
 import com.project.reddital_backend.exceptions.EntityNotFoundException;
 import com.project.reddital_backend.exceptions.UnauthorizedException;
+import com.project.reddital_backend.models.User;
 import com.project.reddital_backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,6 +32,14 @@ public class UserController {
 
         return ResponseEntity.created(URI.create("/user/signup"))
                 .body(registerUser(userSignupRequest));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<UserDto> login(@RequestBody @Valid LoginRequest loginRequest) {
+        loginRequest.validate();
+
+        return ResponseEntity.ok()
+                .body(loginUser(loginRequest));
     }
 
 
@@ -79,5 +90,17 @@ public class UserController {
 
         return userService.signup(userDto).setPassword("");
     }
+
+    /**
+     * perform a login
+     * @param loginRequest the login request object
+     * @return a user DTO of the user that was logged in
+     * @throws UnauthorizedException if the credentials were wrong
+     * @throws BadParametersException if the parameters if the request were bad
+     */
+    private UserDto loginUser(LoginRequest loginRequest) throws UnauthorizedException, BadParametersException {
+        return userService.login(loginRequest.getUsername(), loginRequest.getPassword()).setPassword("");
+    }
+
 
 }
