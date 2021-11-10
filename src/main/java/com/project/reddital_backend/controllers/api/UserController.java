@@ -24,6 +24,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @CrossOrigin
     @PostMapping("/signup")
     public ResponseEntity<UserDto> signup(@RequestBody @Valid SignupRequest signupRequest) {
         signupRequest.validate();
@@ -32,7 +33,8 @@ public class UserController {
                 .body(registerUser(signupRequest));
     }
 
-    @GetMapping("/login")
+    @CrossOrigin
+    @PostMapping("/login")
     public ResponseEntity<UserDto> login(@RequestBody @Valid LoginRequest loginRequest) {
         loginRequest.validate();
 
