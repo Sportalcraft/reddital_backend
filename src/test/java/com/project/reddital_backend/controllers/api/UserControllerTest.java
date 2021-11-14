@@ -159,7 +159,7 @@ public class UserControllerTest {
                 .password(password)
                 .build();
 
-        ResultActions result = get(USER_PATH + "/login", requestAsString(request));
+        ResultActions result = post(USER_PATH + "/login", requestAsString(request));
         String body = result.andReturn().getResponse().getContentAsString();
 
         result.andExpect(status().isOk());
@@ -183,7 +183,7 @@ public class UserControllerTest {
                 .password(password)
                 .build();
 
-        ResultActions result = get(USER_PATH + "/login", requestAsString(request));
+        ResultActions result = post(USER_PATH + "/login", requestAsString(request));
         String body = result.andReturn().getResponse().getContentAsString();
 
         result.andExpect(status().isBadRequest());
@@ -199,7 +199,7 @@ public class UserControllerTest {
                 .password(password + "!")
                 .build();
 
-        ResultActions result = get(USER_PATH + "/login", requestAsString(request));
+        ResultActions result = post(USER_PATH + "/login", requestAsString(request));
         result.andExpect(status().isUnauthorized());
     }
 
@@ -213,7 +213,7 @@ public class UserControllerTest {
                 .password(password )
                 .build();
 
-        ResultActions result = get(USER_PATH + "/login", requestAsString(request));
+        ResultActions result = post(USER_PATH + "/login", requestAsString(request));
         result.andExpect(status().isNotFound());
     }
 
