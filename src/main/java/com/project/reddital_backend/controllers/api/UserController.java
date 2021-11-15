@@ -44,35 +44,6 @@ public class UserController {
     }
 
 
-    // -------------------------------------- exception handlers --------------------------------------
-
-    @ExceptionHandler(DuplicateEntityException.class)
-    public final ResponseEntity<String> handle(DuplicateEntityException ex) {
-       return ResponseEntity.unprocessableEntity()
-                .body(ex.getMessage());
-    }
-
-    @ExceptionHandler(BadParametersException.class)
-    public final ResponseEntity<String> handle(BadParametersException ex) {
-        return ResponseEntity.badRequest()
-                .body(ex.getMessage());
-    }
-
-    @ExceptionHandler(EntityNotFoundException.class)
-    public final ResponseEntity<String> handle(EntityNotFoundException ex) {
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(ex.getMessage());
-    }
-
-    @ExceptionHandler(UnauthorizedException.class)
-    public final ResponseEntity<String> handle(UnauthorizedException ex) {
-        return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED)
-                .body(ex.getMessage());
-    }
-
-
 
     // -------------------------------------- private methods --------------------------------------
 

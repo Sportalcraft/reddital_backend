@@ -6,14 +6,10 @@ import com.project.reddital_backend.exceptions.EntityNotFoundException;
 import com.project.reddital_backend.exceptions.UnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-@RestController
+@ControllerAdvice
 @CrossOrigin
-@RequestMapping("/")
 public class ExceptionController {
 
     //The goal of this controller is to handle exceptions
