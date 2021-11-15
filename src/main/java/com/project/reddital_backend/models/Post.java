@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -33,6 +34,7 @@ public class Post {
     private String content;
 
     @Column(name = "time")
+    @CreationTimestamp
     private Date time;
 
     @ManyToOne
