@@ -1,6 +1,7 @@
 package com.project.reddital_backend.DTOs.mappers;
 
 import com.project.reddital_backend.DTOs.models.UserDto;
+import com.project.reddital_backend.controllers.requests.SignupRequest;
 import com.project.reddital_backend.models.User;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,16 @@ public class UserMapper {
                 .setEmail(user.getEmail())
                 .setUsername(user.getUsername())
                 .setPassword(user.getPassword());
+    }
+
+    public static UserDto toUserDto(SignupRequest signupRequest){
+        if(signupRequest == null)
+            return null;
+
+        return new UserDto()
+                .setUsername(signupRequest.getUsername())
+                .setEmail(signupRequest.getEmail())
+                .setPassword(signupRequest.getPassword());
     }
 
 }

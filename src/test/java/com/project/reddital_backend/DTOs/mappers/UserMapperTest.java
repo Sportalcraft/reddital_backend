@@ -1,6 +1,7 @@
 package com.project.reddital_backend.DTOs.mappers;
 
 import com.project.reddital_backend.DTOs.models.UserDto;
+import com.project.reddital_backend.controllers.requests.SignupRequest;
 import com.project.reddital_backend.models.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +20,8 @@ public class UserMapperTest {
 
     private User user;
 
+    private SignupRequest signupRequest;
+
     // ------------------------------------------------------- preparations -------------------------------------------------------
 
     @BeforeEach
@@ -27,6 +30,12 @@ public class UserMapperTest {
                 .username("Sportalcraft")
                 .email("test@test.com")
                 .password("123456")
+                .build();
+
+        signupRequest = SignupRequest.builder()
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .password(user.getPassword())
                 .build();
     }
 
@@ -38,8 +47,8 @@ public class UserMapperTest {
     // ------------------------------------------------------- tests -------------------------------------------------------
 
     @Test
-    @DisplayName("test toUserDto")
-    public void toUserDto() {
+    @DisplayName("test toUserDto user")
+    public void toUserDto_user() {
         // Run the test
         final UserDto result = UserMapper.toUserDto(user);
 
@@ -51,8 +60,22 @@ public class UserMapperTest {
     }
 
     @Test
+    @DisplayName("test toUserDto signupRequest")
+    public void toUserDto_signup() {
+        // Run the test
+        final UserDto result = UserMapper.toUserDto(signupRequest);
+
+        // Verify the results
+        assertEquals(result.getId(), user.getId());
+        assertEquals(result.getUsername(), user.getUsername());
+        assertEquals(result.getEmail(), user.getEmail());
+        assertEquals(result.getPassword(), user.getPassword());
+    }
+
+    @Test
     @DisplayName("test toUserDto with null parameter")
     public void toUserDto_null() {
-        assertNull(UserMapper.toUserDto(null));
+        assertNull(UserMapper.toUserDto((User) null));
+        assertNull(UserMapper.toUserDto((SignupRequest) null));
     }
 }
