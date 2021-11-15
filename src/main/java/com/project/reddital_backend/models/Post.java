@@ -41,5 +41,5 @@ public class Post {
 
     @ManyToOne
     @JoinColumn(name = "id")
-    private Subreddit subreddit;
+    private SubReddit subreddit;
 }

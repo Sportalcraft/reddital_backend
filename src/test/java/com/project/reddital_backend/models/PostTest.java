@@ -16,7 +16,7 @@ public class PostTest {
     final Date time         = new Date();
 
     final User user = User.builder().username("a").password("123456").email("a@a.a").build();
-    final Subreddit sub = SubReddit.builder().name("r/askTal").build();
+    final SubReddit sub = SubReddit.builder().name("r/askTal").build();
 
     // ------------------------------------------------------- tests -------------------------------------------------------
 
@@ -29,13 +29,13 @@ public class PostTest {
                 .content(content)
                 .time(time)
                 .user(user)
-                .Subreddit(Subreddit)
+                .subreddit(sub)
                 .build();
 
-        assertEquals(username, post.getUsername());
-        assertEquals(email, post.getEmail());
-        assertEquals(password, post.getPassword());
+        assertEquals(title, post.getTitle());
+        assertEquals(content, post.getContent());
+        assertEquals(time, post.getTime());
         assertEquals(user, post.getUser());
-        assertEquals(Subreddit, post.getSubreddit());
+        assertEquals(sub, post.getSubreddit());
     }
 }

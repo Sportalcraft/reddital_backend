@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Accessors(chain = true)
 @Entity
 @Table(name = "subreddits")
-public class Subreddit {
+public class SubReddit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
