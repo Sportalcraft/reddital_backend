@@ -1,6 +1,7 @@
 package com.project.reddital_backend.DTOs.mappers;
 
 import com.project.reddital_backend.DTOs.models.PostDto;
+import com.project.reddital_backend.controllers.requests.PostingRequest;
 import com.project.reddital_backend.models.Post;
 import com.project.reddital_backend.models.SubReddit;
 import com.project.reddital_backend.models.User;
@@ -43,8 +44,27 @@ public class PostMapperTest {
 
         assertEquals(title, result.getTitle());
         assertEquals(content, result.getContent());
-        assertEquals(time, result.getTime());
+        assertEquals(time.getTime(), result.getTime());
         assertEquals(user.getUsername(), result.getUsername());
-        assertEquals(sub.getName(), result.getSubredditName());
+        assertEquals(sub.getName(), result.getSubReddit());
+    }
+
+    @Test
+    @DisplayName("test toPostDto")
+    public void toPostDto_request() {
+        // Run the test
+        PostingRequest request = PostingRequest.builder()
+                .title(title)
+                .content(content)
+                .subReddit(sub.getName())
+                .authenticationKey("TODO") //TODO
+                .build();
+
+        final PostDto result = PostMapper.toPostDto(request);
+
+        assertEquals(title, result.getTitle());
+        assertEquals(content, result.getContent());
+        assertEquals("tal", result.getUsername());
+        assertEquals(sub.getName(), result.getSubReddit());
     }
 }

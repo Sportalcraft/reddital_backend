@@ -17,9 +17,9 @@ public class PostDto {
 
     private String content;
 
-    private Date time;
+    private Long time;
 
     private String username;
 
-    private String subredditName;
+    private String subReddit;
 }

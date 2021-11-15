@@ -1,6 +1,7 @@
 package com.project.reddital_backend.controllers.requests;
 
 import com.project.reddital_backend.exceptions.BadParametersException;
+import com.project.reddital_backend.exceptions.UnauthorizedException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -86,9 +87,9 @@ public class PostingRequestTest {
                 .authenticationKey("")
                 .build();
 
-        assertThrows(BadParametersException.class, postingRequest::validate);
+        assertThrows(UnauthorizedException.class, postingRequest::validate);
 
         postingRequest.setAuthenticationKey(null);
-        assertThrows(BadParametersException.class, postingRequest::validate);
+        assertThrows(UnauthorizedException.class, postingRequest::validate);
     }
 }

@@ -1,6 +1,7 @@
 package com.project.reddital_backend.controllers.requests;
 
 import com.project.reddital_backend.exceptions.BadParametersException;
+import com.project.reddital_backend.exceptions.UnauthorizedException;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -28,7 +29,7 @@ public class PostingRequest extends Request {
         } else  if(nullOrEmpty(subReddit)) {
             ans = "subReddit is not valid";
         } else  if(nullOrEmpty(authenticationKey)) {
-            ans = "authenticationKey is not valid";
+            throw new UnauthorizedException("authenticationKey is not valid");
         }
 
         if(ans != null){

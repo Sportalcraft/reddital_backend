@@ -39,14 +39,14 @@ public class PostService {
      */
     public PostDto posting(PostDto postDto) {
         Optional<User> user = getOptional(userRepository.findByUsername(postDto.getUsername()));
-        Optional<SubReddit> sub = getOptional(subRedditRepository.findByName(postDto.getSubredditName()));
+        Optional<SubReddit> sub = getOptional(subRedditRepository.findByName(postDto.getSubReddit()));
 
         if(user.isEmpty()) {  // there is no such user, error!
             throw new UnauthorizedException("you do not have permission to post here!");
         }
 
         if(sub.isEmpty()) {  // there is no such user, error!
-            throw new BadParametersException("no such sub exists : " + postDto.getSubredditName());
+            throw new BadParametersException("no such sub exists : " + postDto.getSubReddit());
         }
 
         //saving the post

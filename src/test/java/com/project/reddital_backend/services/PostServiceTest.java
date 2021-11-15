@@ -67,7 +67,7 @@ class PostServiceTest {// ------------------------------------------------------
         postDto = PostDto.builder()
                 .title(post.getTitle())
                 .content(post.getContent())
-                .subredditName(post.getSubreddit().getName())
+                .subReddit(post.getSubreddit().getName())
                 .username(post.getUser().getUsername())
                 .build();
     }
@@ -100,9 +100,9 @@ class PostServiceTest {// ------------------------------------------------------
         // Verify the results
         assertEquals(postDto.getTitle(), result.getTitle());
         assertEquals(postDto.getContent(), result.getContent());
-        assertEquals(postDto.getSubredditName(), result.getSubredditName());
+        assertEquals(postDto.getSubReddit(), result.getSubReddit());
         assertTrue(result.getId() >= 0);
-        assertTrue(Math.abs(new Date().getTime() - result.getTime().getTime()) < 1000);
+        assertTrue(Math.abs(new Date().getTime() - result.getTime()) < 1000);
     }
 
     @Test
