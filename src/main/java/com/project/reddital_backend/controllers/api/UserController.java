@@ -1,5 +1,6 @@
 package com.project.reddital_backend.controllers.api;
 
+import com.project.reddital_backend.DTOs.mappers.UserMapper;
 import com.project.reddital_backend.DTOs.models.UserDto;
 import com.project.reddital_backend.controllers.requests.LoginRequest;
 import com.project.reddital_backend.controllers.requests.SignupRequest;
@@ -82,13 +83,7 @@ public class UserController {
      * @return the user that was saved to the DB
      */
     private UserDto registerUser(SignupRequest signupRequest) throws DuplicateEntityException {
-        UserDto userDto = new UserDto()
-                //.setId(signupRequest.getId())
-                .setUsername(signupRequest.getUsername())
-                .setEmail(signupRequest.getEmail())
-                .setPassword(signupRequest.getPassword());
-
-        return userService.signup(userDto);
+        return userService.signup(UserMapper.toUserDto(signupRequest));
     }
 
     /**
