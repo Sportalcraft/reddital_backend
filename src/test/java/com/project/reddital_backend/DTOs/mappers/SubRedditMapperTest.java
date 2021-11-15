@@ -1,23 +1,17 @@
 package com.project.reddital_backend.DTOs.mappers;
 
-import com.project.reddital_backend.DTOs.models.PostDto;
 import com.project.reddital_backend.DTOs.models.SubRedditDto;
-import com.project.reddital_backend.models.Post;
 import com.project.reddital_backend.models.SubReddit;
-import com.project.reddital_backend.models.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@ExtendWith(MockitoExtension.class)
 public class SubRedditMapperTest {
-}
-
-
-
-public class PostMapperTest {
 
     // ------------------------------------------------------- properties -------------------------------------------------------
 
