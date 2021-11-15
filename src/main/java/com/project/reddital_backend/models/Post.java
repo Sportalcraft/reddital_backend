@@ -5,7 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -33,8 +36,10 @@ public class Post {
     @Column(name = "content")
     private String content;
 
-    @Column(name = "time")
     @CreationTimestamp
+    @Generated(GenerationTime.INSERT)
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "time", /*columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP",*/ insertable=false, updatable = false)
     private Date time;
 
     @ManyToOne
@@ -44,4 +49,9 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "id")
     private SubReddit subreddit;
+
+    @PrePersist
+    protected void onCreate() {
+        if (time == null) { time = new Date(); }
+    }
 }
