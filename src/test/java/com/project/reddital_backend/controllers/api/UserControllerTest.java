@@ -3,6 +3,7 @@ package com.project.reddital_backend.controllers.api;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.PathNotFoundException;
+import com.project.reddital_backend.DTOs.mappers.UserMapper;
 import com.project.reddital_backend.DTOs.models.UserDto;
 import com.project.reddital_backend.controllers.requests.LoginRequest;
 import com.project.reddital_backend.controllers.requests.Request;
@@ -40,6 +41,9 @@ public class UserControllerTest {
 
     @MockBean
     private UserService mockUserService;
+
+    @MockBean
+    private UserMapper userMapper;
 
     @Autowired
     private MockMvc mockMvc;
@@ -81,6 +85,9 @@ public class UserControllerTest {
             return (UserDto) args[0];
         });
 
+        Mockito.when(userMapper.toUserDto((SignupRequest) any()))
+                .thenReturn(UserDto.builder().username(username).email(email).build());
+
         Request request = SignupRequest.builder()
                         .username(username)
                         .email(email)
@@ -92,6 +99,7 @@ public class UserControllerTest {
 
         result.andExpect(status().isCreated());
 
+        checkProperty(username, "$.username", body);
         checkProperty(email, "$.email", body);
 
         try {

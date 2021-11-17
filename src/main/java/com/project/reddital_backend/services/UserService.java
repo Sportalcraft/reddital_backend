@@ -28,6 +28,9 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder; // encrypt and decrypt passwords
 
+    @Autowired
+    private UserMapper userMapper; // map obj to dto
+
     // ------------------------------------------------------- methods -------------------------------------------------------
 
     /**
@@ -177,7 +180,7 @@ public class UserService {
      * @return the user as dto
      */
     private UserDto mapDto(User user) {
-        return UserMapper.toUserDto(user);
+        return userMapper.toUserDto(user);
     }
 
     /**

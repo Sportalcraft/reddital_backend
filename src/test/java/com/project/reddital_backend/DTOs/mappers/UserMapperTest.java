@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,6 +18,10 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 public class UserMapperTest {
 
     // ------------------------------------------------------- properties -------------------------------------------------------
+
+    @InjectMocks
+    private UserMapper userMapper;
+
 
     private User user;
 
@@ -50,7 +55,7 @@ public class UserMapperTest {
     @DisplayName("test toUserDto user")
     public void toUserDto_user() {
         // Run the test
-        final UserDto result = UserMapper.toUserDto(user);
+        final UserDto result = userMapper.toUserDto(user);
 
         // Verify the results
         assertEquals(result.getId(), user.getId());
@@ -63,7 +68,7 @@ public class UserMapperTest {
     @DisplayName("test toUserDto signupRequest")
     public void toUserDto_signup() {
         // Run the test
-        final UserDto result = UserMapper.toUserDto(signupRequest);
+        final UserDto result = userMapper.toUserDto(signupRequest);
 
         // Verify the results
         assertEquals(result.getId(), user.getId());
@@ -75,7 +80,7 @@ public class UserMapperTest {
     @Test
     @DisplayName("test toUserDto with null parameter")
     public void toUserDto_null() {
-        assertNull(UserMapper.toUserDto((User) null));
-        assertNull(UserMapper.toUserDto((SignupRequest) null));
+        assertNull(userMapper.toUserDto((User) null));
+        assertNull(userMapper.toUserDto((SignupRequest) null));
     }
 }

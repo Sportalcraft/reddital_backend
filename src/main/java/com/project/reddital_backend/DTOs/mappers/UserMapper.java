@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserMapper {
 
-    public static UserDto toUserDto(User user) {
+    public UserDto toUserDto(User user) {
 
         if(user == null)
             return null;
@@ -20,7 +20,7 @@ public class UserMapper {
                 .setPassword(user.getPassword());
     }
 
-    public static UserDto toUserDto(SignupRequest signupRequest){
+    public UserDto toUserDto(SignupRequest signupRequest){
         if(signupRequest == null)
             return null;
 

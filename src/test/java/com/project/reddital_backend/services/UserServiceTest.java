@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -35,12 +36,17 @@ public class UserServiceTest {
     @MockBean
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @MockBean
+    private UserMapper userMapper;
+
     @SpyBean
     private UserService userServiceUnderTest;
 
 
 
     private User user;
+
+    private UserDto udto;
 
     // ------------------------------------------------------- preparations -------------------------------------------------------
 
@@ -53,11 +59,18 @@ public class UserServiceTest {
                 .email("test@test.com")
                 .password("123456")
                 .build();
+
+        udto = UserDto.builder()
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .password(user.getEmail())
+                .build();
     }
 
     @AfterEach
     public void tearDown() {
         user = null;
+        udto = null;
         userServiceUnderTest = null;
     }
 
@@ -70,25 +83,20 @@ public class UserServiceTest {
     @Test
     @DisplayName("test signup with existing username")
     public void signup_userExist() {
-        assertThrows(DuplicateEntityException.class, () -> {
-            Mockito.when(mockUserRepository.findByUsername(anyString()))
-                    .thenReturn(user);
+        Mockito.when(mockUserRepository.findByUsername(anyString()))
+                .thenReturn(user);
 
-            userServiceUnderTest.signup(UserMapper.toUserDto(user));
+        Mockito.when(userMapper.toUserDto((User) any()))
+                .thenReturn(udto);
+
+        assertThrows(DuplicateEntityException.class, () -> {
+            userServiceUnderTest.signup(userMapper.toUserDto(user));
         });
     }
 
     @Test
     @DisplayName("test signup with a new username")
     public void signup_newUser() {
-        // Setup
-        final String username = "yosiTheKing";
-        final UserDto user2 = UserDto.builder()
-                .username(username)
-                .email("test@test.com")
-                .password("123456")
-                .build();
-
         //change to mocking to fut the signup method
         Mockito.when(mockUserRepository.findByUsername(anyString()))
                 .thenReturn(null);
@@ -105,12 +113,15 @@ public class UserServiceTest {
             return (User) args[0];
         });
 
+        Mockito.when(userMapper.toUserDto((User) any()))
+                .thenReturn(udto);
+
 
         // Run the test
-        final UserDto result = userServiceUnderTest.signup(user2);
+        final UserDto result = userServiceUnderTest.signup(udto);
 
         // Verify the results
-        assertEquals(username, result.getUsername());
+        assertEquals(user.getUsername(), result.getUsername());
     }
 
 
@@ -125,6 +136,9 @@ public class UserServiceTest {
         Mockito.when(mockUserRepository.findById(anyLong()))
                 .thenReturn(user);
 
+        Mockito.when(userMapper.toUserDto((User) any()))
+                .thenReturn(udto);
+
         // Run the test
         final UserDto result = userServiceUnderTest.findUserById(id);
 
@@ -135,16 +149,15 @@ public class UserServiceTest {
     @Test
     @DisplayName("test findUserById with a non existing user")
     public void testFindUserByID_nonExist() {
+        // edit the mocking
+        Mockito.when(mockUserRepository.findById(anyLong()))
+                .thenReturn(null);
+
+        Mockito.when(userMapper.toUserDto((User) any()))
+                .thenReturn(udto);
+
         assertThrows(EntityNotFoundException.class, () -> {
-            // Setup
-            final long id = user.getId();
-
-            // edit the mocking
-            Mockito.when(mockUserRepository.findById(anyLong()))
-                    .thenReturn(null);
-
-            // Run the test
-            userServiceUnderTest.findUserById(id);
+            userServiceUnderTest.findUserById(user.getId());
         });
     }
 
@@ -158,6 +171,9 @@ public class UserServiceTest {
 
         Mockito.when(mockUserRepository.findByUsername(anyString()))
                 .thenReturn(user);
+
+        Mockito.when(userMapper.toUserDto((User) any()))
+                .thenReturn(udto);
 
         // Setup
         final String username = user.getUsername();
@@ -180,6 +196,9 @@ public class UserServiceTest {
             Mockito.when(mockUserRepository.findByUsername(anyString()))
                     .thenReturn(null);
 
+            Mockito.when(userMapper.toUserDto((User) any()))
+                    .thenReturn(udto);
+
             // Run the test
             userServiceUnderTest.findUserByUsername(username);
         });
@@ -200,6 +219,9 @@ public class UserServiceTest {
 
         Mockito.when(mockUserRepository.save(any()))
                 .thenReturn(user);
+
+        Mockito.when(userMapper.toUserDto((User) any()))
+                .thenReturn(udto);
 
         final UserDto dto = userServiceUnderTest.findUserByUsername(username)
                 .setEmail(newEmail);
@@ -223,6 +245,9 @@ public class UserServiceTest {
             Mockito.when(mockUserRepository.findByUsername(anyString()))
                     .thenReturn(null);
 
+            Mockito.when(userMapper.toUserDto((User) any()))
+                    .thenReturn(udto);
+
             final UserDto dto = userServiceUnderTest.findUserByUsername(username)
                     .setEmail(newEmail);
 
@@ -235,11 +260,16 @@ public class UserServiceTest {
     @Test
     @DisplayName("test changePassword with existing user")
     public void changePassword_exist() {
+        final String newPass = "lrno4!dhvoASDednbcokeA$%%!@pl;km"; // The force is strong with this one!
+
         Mockito.when(mockUserRepository.findByUsername(anyString()))
                 .thenReturn(user);
 
         Mockito.when(mockUserRepository.save(any()))
-                .thenReturn(user);
+                .thenReturn(user.setPassword(newPass));
+
+        Mockito.when(userMapper.toUserDto((User) any()))
+                .thenReturn(udto.setPassword(newPass));
 
         // return the password that was received (encrypting is non-important for those unit testing)
         Mockito.when(bCryptPasswordEncoder.encode(anyString())).thenAnswer((Answer<String>) invocation -> {
@@ -248,16 +278,11 @@ public class UserServiceTest {
         });
 
 
-        final String username = user.getUsername();
-        final String newPass = "lrno4!dhvoASDednbcokeA$%%!@pl;km"; // The force is strong with this one!
-
-        final UserDto dto = userServiceUnderTest.findUserByUsername(username);
-
-        final UserDto result = userServiceUnderTest.changePassword(dto, newPass);
+        final UserDto result = userServiceUnderTest.changePassword(udto, newPass);
 
         // Verify the results
         assertEquals(newPass, result.getPassword());
-        assertEquals(newPass, userServiceUnderTest.findUserByUsername(username).getPassword());
+        assertEquals(newPass, userServiceUnderTest.findUserByUsername(user.getUsername()).getPassword());
     }
 
     @Test
@@ -273,6 +298,9 @@ public class UserServiceTest {
             Mockito.when(mockUserRepository.findByUsername(anyString()))
                     .thenReturn(null);
 
+            Mockito.when(userMapper.toUserDto((User) any()))
+                    .thenReturn(udto);
+
 
             userServiceUnderTest.changePassword(dto, newPass);
         });
@@ -283,6 +311,9 @@ public class UserServiceTest {
     public void login_good() {
         Mockito.when(mockUserRepository.findByUsername(anyString()))
                 .thenReturn(user);
+
+        Mockito.when(userMapper.toUserDto((User) any()))
+                .thenReturn(udto);
 
         // return if the password matches
         Mockito.when(bCryptPasswordEncoder.matches(anyString(),anyString())).thenAnswer((Answer<Boolean>) invocation -> {
@@ -306,6 +337,9 @@ public class UserServiceTest {
             Mockito.when(mockUserRepository.findByUsername(anyString()))
                     .thenReturn(user);
 
+            Mockito.when(userMapper.toUserDto((User) any()))
+                    .thenReturn(udto);
+
             // return if the password matches
             Mockito.when(bCryptPasswordEncoder.matches(anyString(),anyString())).thenAnswer((Answer<Boolean>) invocation -> {
                 Object[] args = invocation.getArguments();
@@ -324,6 +358,9 @@ public class UserServiceTest {
         assertThrows(UnauthorizedException.class, ()->{
             Mockito.when(mockUserRepository.findByUsername(anyString()))
                     .thenReturn(user);
+
+            Mockito.when(userMapper.toUserDto((User) any()))
+                    .thenReturn(udto);
 
             // return if the password matches
             Mockito.when(bCryptPasswordEncoder.matches(anyString(),anyString())).thenAnswer((Answer<Boolean>) invocation -> {

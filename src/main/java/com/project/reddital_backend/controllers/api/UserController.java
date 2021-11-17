@@ -25,6 +25,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserMapper userMapper;
+
     @CrossOrigin
     @PostMapping("/signup")
     public ResponseEntity<UserDto> signup(@RequestBody @Valid SignupRequest signupRequest) {
@@ -54,7 +57,7 @@ public class UserController {
      * @return the user that was saved to the DB
      */
     private UserDto registerUser(SignupRequest signupRequest) throws DuplicateEntityException {
-        return userService.signup(UserMapper.toUserDto(signupRequest));
+        return userService.signup(userMapper.toUserDto(signupRequest));
     }
 
     /**
