@@ -4,7 +4,6 @@ import com.project.reddital_backend.DTOs.models.PostDto;
 import com.project.reddital_backend.DTOs.models.UserDto;
 import com.project.reddital_backend.controllers.requests.PostingRequest;
 import com.project.reddital_backend.models.Post;
-import com.project.reddital_backend.models.User;
 import com.project.reddital_backend.services.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -38,11 +37,12 @@ public class PostMapper {
     /**
      * transform a posting request object into a post dto. transform authentication key into a user.
      * @param postingRequest the posting request
+     * @param subreddital the subreddit the request is for
      * @return the mapping of the posting request to post dto
      */
-    public PostDto toPostDto(PostingRequest postingRequest) {
+    public PostDto toPostDto(PostingRequest postingRequest, String subreddital) {
 
-        if(postingRequest == null)
+        if(postingRequest == null || subreddital == null)
             return null;
 
         String key = postingRequest.getAuthenticationKey();
@@ -52,7 +52,7 @@ public class PostMapper {
         return PostDto.builder()
                 .title(postingRequest.getTitle())
                 .content(postingRequest.getContent())
-                .subReddit(postingRequest.getSubReddit())
+                .subReddit(subreddital)
                 .username(userName)
                 .build();
     }

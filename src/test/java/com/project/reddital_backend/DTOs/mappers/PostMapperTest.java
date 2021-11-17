@@ -73,11 +73,10 @@ public class PostMapperTest {
         PostingRequest request = PostingRequest.builder()
                 .title(title)
                 .content(content)
-                .subReddit(sub.getName())
                 .authenticationKey("42")
                 .build();
 
-        final PostDto result = postMapper.toPostDto(request);
+        final PostDto result = postMapper.toPostDto(request, sub.getName());
 
         assertEquals(title, result.getTitle());
         assertEquals(content, result.getContent());

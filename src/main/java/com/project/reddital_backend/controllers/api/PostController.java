@@ -9,11 +9,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 import java.net.URI;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/post")
+@RequestMapping("/")
 public class PostController {
 
     @Autowired
@@ -25,18 +26,24 @@ public class PostController {
 
     @CrossOrigin
     @PostMapping("/posting")
-    public ResponseEntity<PostDto> signup(@RequestBody @Valid PostingRequest postingRequest) {
+    public ResponseEntity<PostDto> signup(@RequestBody @Valid PostingRequest postingRequest, @PathParam("subreddital") String subreddital) {
         postingRequest.validate();
 
         return ResponseEntity.created(URI.create("/post/posting"))
-                .body(posting(postingRequest));
+                .body(posting(postingRequest, subreddital));
     }
 
 
     // ----------------------------------------- private methods ----------------------------------------------
 
-    private PostDto posting(PostingRequest toPost) {
-        return postService.posting(postMapper.toPostDto((toPost)));
+    /**
+     * post a post
+     * @param toPost the posting request
+     * @param subreddital the subreddit to post to
+     * @return the posted post's dto
+     */
+    private PostDto posting(PostingRequest toPost, String subreddital) {
+        return postService.posting(postMapper.toPostDto(toPost, subreddital));
     }
 
 }

@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import java.util.Date;
 import java.sql.Timestamp;
@@ -46,7 +47,7 @@ public class PostControllerTest {
 
     private ObjectMapper objectMapper;
 
-    private final String POST_PATH  = "/post";
+    private final String POST_PATH  = "";
 
     final String title = "i'm tal, AMA";
     final String content = "all questions will be answered!";
@@ -90,17 +91,16 @@ public class PostControllerTest {
             return post.setTime(new Date().getTime());
         });
 
-        Mockito.when(mockPostMapper.toPostDto((PostingRequest) any()))
+        Mockito.when(mockPostMapper.toPostDto(any(), anyString()))
                 .thenReturn(pdto);
 
         Request request = PostingRequest.builder()
                 .title(title)
                 .content(content)
-                .subReddit(subReddit)
                 .authenticationKey(authentication)
                 .build();
 
-        ResultActions result = post(POST_PATH + "/posting", requestAsString(request));
+        ResultActions result = post(POST_PATH + "/posting", requestAsString(request), subReddit);
         String body = result.andReturn().getResponse().getContentAsString();
 
         result.andExpect(status().isCreated());
@@ -123,10 +123,9 @@ public class PostControllerTest {
         Request request = PostingRequest.builder()
                 .title(title)
                 .content(content)
-                .subReddit(subReddit)
                 .build();
 
-        ResultActions result = post(POST_PATH + "/posting", requestAsString(request));
+        ResultActions result = post(POST_PATH + "/posting", requestAsString(request), subReddit);
         result.andExpect(status().isUnauthorized());
     }
 
@@ -136,8 +135,10 @@ public class PostControllerTest {
         assertEquals(expected, "" + JsonPath.read(body, jsonPath));
     }
 
-    private ResultActions post(String uri, String content) throws Exception {
-        return mockMvc.perform(MockMvcRequestBuilders.post(uri)
+    private ResultActions post(String uri, String content, String subreddital) throws Exception {
+        return mockMvc.perform(MockMvcRequestBuilders
+                .post(uri)
+                .param("subreddital", subreddital)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content)
         );

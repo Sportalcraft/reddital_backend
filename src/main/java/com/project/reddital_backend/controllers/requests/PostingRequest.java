@@ -14,7 +14,7 @@ public class PostingRequest extends Request {
 
     private String content;
 
-    private String subReddit;
+    //private String subReddit;
 
     private String authenticationKey;
 
@@ -26,8 +26,6 @@ public class PostingRequest extends Request {
             ans = "title is not valid";
         } else  if(nullOrEmpty(content)) {
             ans = "content is not valid";
-        } else  if(nullOrEmpty(subReddit)) {
-            ans = "subReddit is not valid";
         } else  if(nullOrEmpty(authenticationKey)) {
             throw new UnauthorizedException("authenticationKey is not valid");
         }

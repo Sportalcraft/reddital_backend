@@ -100,10 +100,10 @@ class PostServiceTest {
         Mockito.when(mockSubRedditRepository.findByName(anyString()))
                 .thenReturn(sub);
 
-        Mockito.when(postMapper.toPostDto((PostingRequest) any()))
+        Mockito.when(postMapper.toPostDto(any(), anyString()))
                 .thenReturn(postDto);
 
-        Mockito.when(postMapper.toPostDto((Post) any()))
+        Mockito.when(postMapper.toPostDto(any()))
                 .thenReturn(postDto);
 
 
@@ -131,7 +131,7 @@ class PostServiceTest {
         Mockito.when(mockSubRedditRepository.findByName(anyString()))
                 .thenReturn(sub);
 
-        Mockito.when(postMapper.toPostDto((PostingRequest) any()))
+        Mockito.when(postMapper.toPostDto(any(), anyString()))
                 .thenReturn(postDto);
 
 
@@ -152,7 +152,7 @@ class PostServiceTest {
         Mockito.when(mockSubRedditRepository.findByName(anyString()))
                 .thenReturn(null);
 
-        Mockito.when(postMapper.toPostDto((PostingRequest) any()))
+        Mockito.when(postMapper.toPostDto(any(), anyString()))
                 .thenReturn(postDto);
 
 
@@ -173,7 +173,7 @@ class PostServiceTest {
         Mockito.when(mockSubRedditRepository.findByName(anyString()))
                 .thenReturn(sub);
 
-        Mockito.when(postMapper.toPostDto((PostingRequest) any()))
+        Mockito.when(postMapper.toPostDto(any(), anyString()))
                 .thenReturn(postDto);
 
 

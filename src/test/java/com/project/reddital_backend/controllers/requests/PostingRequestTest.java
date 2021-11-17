@@ -18,7 +18,6 @@ public class PostingRequestTest {
         Request postingRequest = PostingRequest.builder()
                 .title("hello world!")
                 .content("just came to say hello!")
-                .subReddit("r/askTal")
                 .authenticationKey("1")
                 .build();
 
@@ -32,7 +31,6 @@ public class PostingRequestTest {
         PostingRequest postingRequest = PostingRequest.builder()
                 .title("")
                 .content("just came to say hello!")
-                .subReddit("r/askTal")
                 .authenticationKey("1")
                 .build();
 
@@ -49,7 +47,6 @@ public class PostingRequestTest {
         PostingRequest postingRequest = PostingRequest.builder()
                 .title("hello world!")
                 .content("")
-                .subReddit("r/askTal")
                 .authenticationKey("1")
                 .build();
 
@@ -60,30 +57,12 @@ public class PostingRequestTest {
     }
 
     @Test
-    @DisplayName("test validate bad subreddit")
-    public void validate_subreddit(){
-
-        PostingRequest postingRequest = PostingRequest.builder()
-                .title("hello world!")
-                .content("just came to say hello!")
-                .subReddit("")
-                .authenticationKey("1")
-                .build();
-
-        assertThrows(BadParametersException.class, postingRequest::validate);
-
-        postingRequest.setSubReddit(null);
-        assertThrows(BadParametersException.class, postingRequest::validate);
-    }
-
-    @Test
     @DisplayName("test validate bad authentication key")
     public void validate_authenticationkey(){
 
         PostingRequest postingRequest = PostingRequest.builder()
                 .title("hello world!")
                 .content("just came to say hello!")
-                .subReddit("r/askTal")
                 .authenticationKey("")
                 .build();
 

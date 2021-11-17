@@ -41,15 +41,13 @@ public class Post {
     private Date time;
 
     @ManyToOne
-    @JoinColumn(name = "id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "id")
     private SubReddit subreddit;
 
-    @PrePersist
-    protected void onCreate() {
-        if (time == null) { time = new Date(); }
-    }
+    //@PrePersist
+    //protected void onCreate() {
+    //    if (time == null) { time = new Date(); }
+    //}
 }
