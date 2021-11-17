@@ -5,7 +5,10 @@ import com.project.reddital_backend.models.SubReddit;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,6 +17,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class SubRedditMapperTest {
 
     // ------------------------------------------------------- properties -------------------------------------------------------
+
+    @InjectMocks
+    private SubRedditMapper subRedditMapperUnderTest;
 
     final String name      = "r/askTal";
 
@@ -27,7 +33,7 @@ public class SubRedditMapperTest {
                 .name(name)
                 .build();
 
-        final SubRedditDto result = SubRedditMapper.toSubRedditDto(post);
+        final SubRedditDto result = subRedditMapperUnderTest.toSubRedditDto(post);
 
         assertEquals(name, result.getName());
     }

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SubRedditMapper {
 
-    public static SubRedditDto toSubRedditDto(SubReddit sub) {
+    public SubRedditDto toSubRedditDto(SubReddit sub) {
 
         if(sub == null)
             return null;
