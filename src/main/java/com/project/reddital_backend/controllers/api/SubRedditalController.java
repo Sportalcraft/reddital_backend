@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
@@ -25,8 +24,7 @@ public class SubRedditalController {
 
     @CrossOrigin
     @PostMapping("/create")
-    public ResponseEntity<SubRedditDto> createSub(@RequestBody @Valid String req) {
-        AddSubRequest request = AddSubRequest.builder().name(req).build();
+    public ResponseEntity<SubRedditDto> createSub(@RequestBody AddSubRequest request) {
 
         request.validate();
 

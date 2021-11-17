@@ -12,6 +12,8 @@ public class AddSubRequest  extends Request{
 
     private String name;
 
+    private String ignore; // for whatever resun spring cannot parde a request with only one item in the body, adding a usless parameter....
+
 
     @Override
     public void validate() throws BadParametersException {
