@@ -37,8 +37,6 @@ public class Post {
     private String content;
 
     @CreationTimestamp
-    //@Generated(GenerationTime.INSERT)
-    //@Temporal(TemporalType.TIMESTAMP)
     @Column(name = "time", /*columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP",*/ insertable=false, updatable = false)
     private Date time;
 

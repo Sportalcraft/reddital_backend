@@ -7,6 +7,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class SubRedditMapper {
 
+    /**
+     * transform a Subreddit object to subreddit dto
+     * @param sub the subreddit
+     * @return the mapping of the subreddit into a dto
+     */
     public SubRedditDto toSubRedditDto(SubReddit sub) {
 
         if(sub == null)

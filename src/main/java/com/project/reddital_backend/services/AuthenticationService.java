@@ -1,9 +1,8 @@
 package com.project.reddital_backend.services;
 
 import com.project.reddital_backend.DTOs.models.UserDto;
-import com.project.reddital_backend.models.User;
+import com.project.reddital_backend.exceptions.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,7 +20,11 @@ public class AuthenticationService {
      * @return  the user it belongs to, null if key is not valid or expired
      */
     public UserDto authenticate(String authenticationKey) {
-        return userService.findUserById(key2id(authenticationKey));
+        try {
+            return userService.findUserById(key2id(authenticationKey));
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     // -------------------------------- private methods --------------------------------

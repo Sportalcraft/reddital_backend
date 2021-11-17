@@ -2,9 +2,7 @@ package com.project.reddital_backend.controllers.api;
 
 import com.project.reddital_backend.DTOs.mappers.PostMapper;
 import com.project.reddital_backend.DTOs.models.PostDto;
-import com.project.reddital_backend.DTOs.models.UserDto;
 import com.project.reddital_backend.controllers.requests.PostingRequest;
-import com.project.reddital_backend.controllers.requests.SignupRequest;
 import com.project.reddital_backend.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

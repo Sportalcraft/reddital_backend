@@ -15,6 +15,11 @@ public class PostMapper {
     @Autowired
     private AuthenticationService authenticationService;
 
+    /**
+     * transform a post object into a post dto
+     * @param post the post object
+     * @return the mapping of the post object to post dto
+     */
     public PostDto toPostDto(Post post) {
 
         if(post == null)
@@ -30,6 +35,11 @@ public class PostMapper {
                 .build();
     }
 
+    /**
+     * transform a posting request object into a post dto. transform authentication key into a user.
+     * @param postingRequest the posting request
+     * @return the mapping of the posting request to post dto
+     */
     public PostDto toPostDto(PostingRequest postingRequest) {
 
         if(postingRequest == null)
@@ -37,7 +47,7 @@ public class PostMapper {
 
         String key = postingRequest.getAuthenticationKey();
         UserDto user = authenticationService.authenticate(key);
-        String userName = user.getUsername();
+        String userName = user == null? null : user.getUsername();
 
         return PostDto.builder()
                 .title(postingRequest.getTitle())

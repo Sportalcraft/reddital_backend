@@ -8,6 +8,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserMapper {
 
+    /**
+     * transform a user object into a user dto
+     * @param user the user object
+     * @return the mapped user dto
+     */
     public UserDto toUserDto(User user) {
 
         if(user == null)
@@ -20,6 +25,11 @@ public class UserMapper {
                 .setPassword(user.getPassword());
     }
 
+    /**
+     * transform a signup request into a user dto
+     * @param signupRequest the signup request
+     * @return the mapped user dto
+     */
     public UserDto toUserDto(SignupRequest signupRequest){
         if(signupRequest == null)
             return null;

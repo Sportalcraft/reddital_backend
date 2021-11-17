@@ -22,6 +22,8 @@ import java.util.Optional;
 @Setter
 public class PostService {
 
+    // ------------------------------------------------------- properties -------------------------------------------------------
+
     @Autowired
     private PostRepository postRepository; // access DB for post operations
 
@@ -34,6 +36,8 @@ public class PostService {
     @Autowired
     private PostMapper postMapper;
 
+
+    // ------------------------------------------------------- methods -------------------------------------------------------
 
     /**
      * post a post
