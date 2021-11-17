@@ -1,6 +1,8 @@
 package com.project.reddital_backend.services;
 
+import com.project.reddital_backend.DTOs.mappers.PostMapper;
 import com.project.reddital_backend.DTOs.models.PostDto;
+import com.project.reddital_backend.controllers.requests.PostingRequest;
 import com.project.reddital_backend.exceptions.BadParametersException;
 import com.project.reddital_backend.exceptions.UnauthorizedException;
 import com.project.reddital_backend.models.Post;
@@ -22,11 +24,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 
 @ExtendWith(SpringExtension.class)
-class PostServiceTest {// ------------------------------------------------------- properties -------------------------------------------------------
+class PostServiceTest {
+
+    // ------------------------------------------------------- properties -------------------------------------------------------
 
     @MockBean
     private PostRepository mockPostRepository;
@@ -36,6 +39,9 @@ class PostServiceTest {// ------------------------------------------------------
 
     @MockBean
     private SubRedditRepository mockSubRedditRepository;
+
+    @MockBean
+    private PostMapper postMapper;
 
 
     @SpyBean
@@ -69,6 +75,7 @@ class PostServiceTest {// ------------------------------------------------------
                 .content(post.getContent())
                 .subReddit(post.getSubreddit().getName())
                 .username(post.getUser().getUsername())
+                .time(new Date().getTime())
                 .build();
     }
 
@@ -92,6 +99,12 @@ class PostServiceTest {// ------------------------------------------------------
 
         Mockito.when(mockSubRedditRepository.findByName(anyString()))
                 .thenReturn(sub);
+
+        Mockito.when(postMapper.toPostDto((PostingRequest) any()))
+                .thenReturn(postDto);
+
+        Mockito.when(postMapper.toPostDto((Post) any()))
+                .thenReturn(postDto);
 
 
 
@@ -118,6 +131,9 @@ class PostServiceTest {// ------------------------------------------------------
         Mockito.when(mockSubRedditRepository.findByName(anyString()))
                 .thenReturn(sub);
 
+        Mockito.when(postMapper.toPostDto((PostingRequest) any()))
+                .thenReturn(postDto);
+
 
         // should throw an error
         assertThrows(UnauthorizedException.class, () -> postServiceUnderTest.posting(postDto));
@@ -136,6 +152,9 @@ class PostServiceTest {// ------------------------------------------------------
         Mockito.when(mockSubRedditRepository.findByName(anyString()))
                 .thenReturn(null);
 
+        Mockito.when(postMapper.toPostDto((PostingRequest) any()))
+                .thenReturn(postDto);
+
 
         // should throw an error
         assertThrows(BadParametersException.class, () -> postServiceUnderTest.posting(postDto));
@@ -153,6 +172,9 @@ class PostServiceTest {// ------------------------------------------------------
 
         Mockito.when(mockSubRedditRepository.findByName(anyString()))
                 .thenReturn(sub);
+
+        Mockito.when(postMapper.toPostDto((PostingRequest) any()))
+                .thenReturn(postDto);
 
 
         assertNull(postServiceUnderTest.posting(postDto));

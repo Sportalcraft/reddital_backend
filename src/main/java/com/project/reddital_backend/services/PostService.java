@@ -31,6 +31,9 @@ public class PostService {
     @Autowired
     private SubRedditRepository subRedditRepository;
 
+    @Autowired
+    private PostMapper postMapper;
+
 
     /**
      * post a post
@@ -58,7 +61,7 @@ public class PostService {
                 .build();
 
         // returned saved post
-        return PostMapper.toPostDto(postRepository.save(post));
+        return postMapper.toPostDto(postRepository.save(post));
     }
 
 

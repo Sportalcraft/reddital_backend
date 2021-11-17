@@ -3,6 +3,7 @@ package com.project.reddital_backend.controllers.api;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
+import com.project.reddital_backend.DTOs.mappers.PostMapper;
 import com.project.reddital_backend.DTOs.models.PostDto;
 import com.project.reddital_backend.controllers.requests.PostingRequest;
 import com.project.reddital_backend.controllers.requests.Request;
@@ -34,6 +35,9 @@ public class PostControllerTest {
     // ----------------------------------------------------- fields -----------------------------------------------------
 
     @MockBean
+    private PostMapper mockPostMapper;
+
+    @MockBean
     private PostService mockPostService;
 
     @Autowired
@@ -48,6 +52,9 @@ public class PostControllerTest {
     final String content = "all questions will be answered!";
     final String subReddit = "r/askTal";
     final String authentication = "0";
+    final String username = "tal";
+
+    private PostDto pdto;
 
 
     // ------------------------------------------------------- preparations -------------------------------------------------------
@@ -55,11 +62,18 @@ public class PostControllerTest {
     @BeforeEach
     public void setUp() {
         objectMapper = new ObjectMapper();
+        pdto = PostDto.builder()
+                .title(title)
+                .content(content)
+                .subReddit(subReddit)
+                .username(username)
+                .build();
     }
 
     @AfterEach
     public void tearDown() {
         objectMapper = null;
+        pdto = null;
     }
 
     // ----------------------------------------------------- tests -----------------------------------------------------
@@ -75,6 +89,9 @@ public class PostControllerTest {
             PostDto post =  (PostDto) args[0];
             return post.setTime(new Date().getTime());
         });
+
+        Mockito.when(mockPostMapper.toPostDto((PostingRequest) any()))
+                .thenReturn(pdto);
 
         Request request = PostingRequest.builder()
                 .title(title)

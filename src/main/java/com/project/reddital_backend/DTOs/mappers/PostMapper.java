@@ -1,12 +1,21 @@
 package com.project.reddital_backend.DTOs.mappers;
 
 import com.project.reddital_backend.DTOs.models.PostDto;
+import com.project.reddital_backend.DTOs.models.UserDto;
 import com.project.reddital_backend.controllers.requests.PostingRequest;
 import com.project.reddital_backend.models.Post;
+import com.project.reddital_backend.models.User;
+import com.project.reddital_backend.services.AuthenticationService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PostMapper {
 
-    public static PostDto toPostDto(Post post) {
+    @Autowired
+    private AuthenticationService authenticationService;
+
+    public PostDto toPostDto(Post post) {
 
         if(post == null)
             return null;
@@ -21,22 +30,20 @@ public class PostMapper {
                 .build();
     }
 
-    public static PostDto toPostDto(PostingRequest postingRequest) {
+    public PostDto toPostDto(PostingRequest postingRequest) {
 
         if(postingRequest == null)
             return null;
+
+        String key = postingRequest.getAuthenticationKey();
+        UserDto user = authenticationService.authenticate(key);
+        String userName = user.getUsername();
 
         return PostDto.builder()
                 .title(postingRequest.getTitle())
                 .content(postingRequest.getContent())
                 .subReddit(postingRequest.getSubReddit())
-                .username(authenticate(postingRequest.getAuthenticationKey()))
+                .username(userName)
                 .build();
-    }
-
-    // ------------------------------------ private methods --------------------------------------
-
-    private static String authenticate(String authenticationKey) {
-        return "tal";
     }
 }

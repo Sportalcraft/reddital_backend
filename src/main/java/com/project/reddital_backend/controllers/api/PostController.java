@@ -21,6 +21,9 @@ public class PostController {
     @Autowired
     private PostService postService;
 
+    @Autowired
+    private PostMapper postMapper;
+
 
     @CrossOrigin
     @PostMapping("/posting")
@@ -35,7 +38,7 @@ public class PostController {
     // ----------------------------------------- private methods ----------------------------------------------
 
     private PostDto posting(PostingRequest toPost) {
-        return postService.posting(PostMapper.toPostDto((toPost)));
+        return postService.posting(postMapper.toPostDto((toPost)));
     }
 
 }

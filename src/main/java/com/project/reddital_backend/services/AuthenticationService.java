@@ -4,11 +4,12 @@ import com.project.reddital_backend.DTOs.models.UserDto;
 import com.project.reddital_backend.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  * the goal of this class is authenticating the authentication key that was received by the user
  */
-@Component
+@Service
 public class AuthenticationService {
 
     @Autowired
