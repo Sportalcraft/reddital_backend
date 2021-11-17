@@ -29,7 +29,7 @@ public class PostController {
     public ResponseEntity<PostDto> signup(@RequestBody @Valid PostingRequest postingRequest, @PathParam("subreddital") String subreddital) {
         postingRequest.validate();
 
-        return ResponseEntity.created(URI.create("/post/posting"))
+        return ResponseEntity.created(URI.create("/posting/" + subreddital))
                 .body(posting(postingRequest, subreddital));
     }
 

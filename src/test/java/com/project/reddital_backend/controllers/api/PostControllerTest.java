@@ -27,7 +27,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import java.util.Date;
-import java.sql.Timestamp;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(PostController.class)
