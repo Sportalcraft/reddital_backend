@@ -14,6 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 
 @ExtendWith(SpringExtension.class)
 class AuthenticationServiceTest {
@@ -36,11 +37,9 @@ class AuthenticationServiceTest {
     void setUp() {
         user = UserDto.builder().username("name").build();
 
-        Mockito.when(mockUserService.findUserById(any()))
+        Mockito.when(mockUserService.findUserById(anyLong()))
                 .thenReturn(user);
 
-        Mockito.when(mockUserService.findUserById(any()))
-                .thenReturn(user);
     }
 
     @AfterEach
@@ -54,6 +53,6 @@ class AuthenticationServiceTest {
 
     @Test
     void authenticate() {
-        assertEquals(authServiceUnderTest.authenticate("a"), user);
+        assertEquals(authServiceUnderTest.authenticate("42"), user);
     }
 }
